@@ -2,19 +2,29 @@
 
 import Button from "@/components/button/Button";
 import Input from "@/components/input/Input";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import AuthSocialButton from "./AuthSocialButton";
 import { BsGithub, BsGoogle } from "react-icons/bs";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type Variant = "Login" | "Register";
 
 const AuthForm = () => {
+  const session = useSession();
+  const router = useRouter();
   const [variant, setVariant] = useState<Variant>("Login");
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (session?.status === "authenticated") {
+      console.log("Authenticated");
+      router.push("/users");
+    }
+  }, []);
 
   // Variant toggler function to switch between Registeration mode and Sign In mode.
   // Note: useCallback is used to prevent a component from re-rendering unless its props have changed.
@@ -46,6 +56,7 @@ const AuthForm = () => {
       // axios call to register route
       axios
         .post("/api/register", data)
+        .then(() => signIn("credentials", data))
         .catch((error) => toast.error("Something went wrong!"))
         .finally(() => setIsLoading(false));
     }
@@ -61,6 +72,7 @@ const AuthForm = () => {
           }
           if (callback?.ok && !callback?.error) {
             toast.success("Logged In!");
+            router.push("/users");
           }
         })
         .finally(() => setIsLoading(false));
@@ -77,8 +89,9 @@ const AuthForm = () => {
           toast.error("Invalid credentials!");
         }
 
-        if (callback?.ok) {
+        if (callback?.ok && !callback?.error) {
           toast.success("Logged In!");
+          router.push("/users");
         }
       })
       .finally(() => setIsLoading(false));
