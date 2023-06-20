@@ -6,6 +6,9 @@ import { useCallback, useState } from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import AuthSocialButton from "./AuthSocialButton";
 import { BsGithub, BsGoogle } from "react-icons/bs";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { signIn } from "next-auth/react";
 
 type Variant = "Login" | "Register";
 
@@ -37,20 +40,48 @@ const AuthForm = () => {
   });
 
   // Custom submit function:
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
     if (variant === "Register") {
       // axios call to register route
+      axios
+        .post("/api/register", data)
+        .catch((error) => toast.error("Something went wrong!"))
+        .finally(() => setIsLoading(false));
     }
     if (variant === "Login") {
       // NextAuth sign in
+      signIn("credentials", {
+        ...data,
+        redirect: false,
+      })
+        .then((callback) => {
+          if (callback?.error) {
+            toast.error("Invalid credentials");
+          }
+          if (callback?.ok && !callback?.error) {
+            toast.success("Logged In!");
+          }
+        })
+        .finally(() => setIsLoading(false));
     }
   };
 
   // Unknown right now, prolly allows for sign up using social media authentication.
   const socialAction = (action: string) => {
     setIsLoading(true);
-    // NextAuth social sign in
+
+    signIn(action, { redirect: false })
+      .then((callback) => {
+        if (callback?.error) {
+          toast.error("Invalid credentials!");
+        }
+
+        if (callback?.ok) {
+          toast.success("Logged In!");
+        }
+      })
+      .finally(() => setIsLoading(false));
   };
   return (
     <div className="mt-8  sm:mx-auto sm:w-full sm:max-w-md">
