@@ -10,7 +10,6 @@ const Avatar = ({ user }: { user?: User }) => {
         <Image
           alt="Avatar"
           src={user?.image || "/images/placeholder.svg"}
-          className="h-auto w-auto"
           fill
         />
       </div>

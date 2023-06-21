@@ -26,7 +26,7 @@ const UserBox = ({ data }: { data: User }) => {
   }, [data, router]);
   return (
     <div
-      className="relative flex items-center space-x-3 bg-white p-3 hover:bg-neutral-100 rounded-lg transition cursor-pointer mb-1"
+      className="relative flex items-center space-x-3 bg-white py-2 hover:bg-neutral-100 rounded-lg transition cursor-pointer mb-1"
       onClick={handleClick}
     >
       <Avatar user={data} />

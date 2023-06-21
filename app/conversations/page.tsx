@@ -11,7 +11,7 @@ const Conversations = async () => {
   return (
     <div
       className={clsx(
-        "lg:pl-80 h-full bg-gray-100 lg:block",
+        "hidden lg:w-full lg:block lg:pl-80 h-full bg-gray-100",
         isOpen ? "block" : "hidden"
       )}
     >
