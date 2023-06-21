@@ -91,8 +91,12 @@ const AuthForm = () => {
 
         if (!callback?.error) {
           toast.success("Logged In!");
-          router.push("/users");
         }
+      })
+      .then(() => router.push("/users"))
+      .catch((error) => {
+        console.log(error);
+        toast.error("Error occurred :(");
       })
       .finally(() => setIsLoading(false));
   };
