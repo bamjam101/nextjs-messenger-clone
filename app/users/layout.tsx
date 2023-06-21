@@ -1,10 +1,15 @@
 import Sidebar from "@/components/sidebar/Sidebar";
+import getUsers from "../actions/getUsers";
+import UserList from "./components/UserList";
 
-const UsersLayout = ({ children }: { children: React.ReactNode }) => {
+const UsersLayout = async ({ children }: { children: React.ReactNode }) => {
+  const users = await getUsers();
   return (
-    // @ts-ignore
     <Sidebar>
-      <main className="h-full">{children}</main>
+      <main className="h-full">
+        <UserList items={users!} />
+        {children}
+      </main>
     </Sidebar>
   );
 };

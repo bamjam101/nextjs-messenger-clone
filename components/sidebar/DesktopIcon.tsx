@@ -4,7 +4,6 @@ import clsx from "clsx";
 import Link from "next/link";
 
 interface DesktopIconProps {
-  key: string;
   href: string;
   label: string;
   icon: any;
@@ -12,7 +11,6 @@ interface DesktopIconProps {
   onClick?: () => void;
 }
 const DesktopIcon: React.FC<DesktopIconProps> = ({
-  key,
   href,
   label,
   icon: Icon,

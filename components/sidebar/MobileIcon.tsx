@@ -4,14 +4,12 @@ import clsx from "clsx";
 import Link from "next/link";
 
 interface MobileIconProps {
-  key: string;
   href: string;
   icon: any;
   active?: boolean;
   onClick?: () => void;
 }
 const MobileIcon: React.FC<MobileIconProps> = ({
-  key,
   href,
   icon: Icon,
   active,
