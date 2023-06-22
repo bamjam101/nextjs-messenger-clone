@@ -1,7 +1,16 @@
+"use client";
+
 import Image from "next/image";
 import AuthForm from "./components/AuthForm";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-export default function Home() {
+const Home = () => {
+  const session = useSession();
+  const router = useRouter();
+  if (session) {
+    return router.push("/users");
+  }
   return (
     <main
       className={`flex min-h-full flex-col items-center justify-center py-12 sm:px-6 lg:px-8 bg-gray-100`}
@@ -21,4 +30,6 @@ export default function Home() {
       <AuthForm />
     </main>
   );
-}
+};
+
+export default Home;
