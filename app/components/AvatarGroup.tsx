@@ -19,6 +19,7 @@ const AvatarGroup: React.FC<AvatarGroupProps> = ({ users }) => {
     <div className="relative h-11 w-11">
       {sliceUsers.map((user, index) => (
         <div
+          key={user?.id}
           className={`absolute inline-block rounded-full overflow-hidden h-[24px] w-[24px] ${
             positionMap[index as keyof typeof positionMap]
           }`}
@@ -26,6 +27,8 @@ const AvatarGroup: React.FC<AvatarGroupProps> = ({ users }) => {
           <Image
             alt="Avatar"
             fill
+            sizes="24"
+            className="object-contain"
             src={user?.image || "/images/placeholder.svg"}
           />
         </div>
