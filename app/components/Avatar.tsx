@@ -3,6 +3,7 @@
 import { User } from "@prisma/client";
 import Image from "next/image";
 import useActiveList from "../hooks/useActiveList";
+import getCurrentUser from "../actions/getCurrentUser";
 
 const Avatar = ({ user }: { user?: User }) => {
   const { members } = useActiveList();

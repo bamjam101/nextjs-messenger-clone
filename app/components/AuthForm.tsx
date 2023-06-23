@@ -20,11 +20,12 @@ const AuthForm = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     if (session?.status === "authenticated") {
-      console.log("Authenticated");
       router.push("/users");
     }
-  }, []);
+    setIsLoading(false);
+  }, [session?.status, router]);
 
   // Variant toggler function to switch between Registeration mode and Sign In mode.
   // Note: useCallback is used to prevent a component from re-rendering unless its props have changed.
@@ -53,26 +54,39 @@ const AuthForm = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
     if (variant === "Register") {
-      // axios call to register route
       axios
         .post("/api/register", data)
-        .then(() => signIn("credentials", data))
-        .catch((error) => toast.error("Something went wrong!"))
+        .then(() =>
+          signIn("credentials", {
+            ...data,
+            redirect: false,
+          })
+        )
+        .then((callback) => {
+          if (callback?.error) {
+            toast.error("Invalid credentials!");
+          }
+
+          if (callback?.ok) {
+            router.push("/conversations");
+          }
+        })
+        .catch(() => toast.error("Something went wrong!"))
         .finally(() => setIsLoading(false));
     }
+
     if (variant === "Login") {
-      // NextAuth sign in
       signIn("credentials", {
         ...data,
         redirect: false,
       })
         .then((callback) => {
           if (callback?.error) {
-            toast.error("Invalid credentials");
+            toast.error("Invalid credentials!");
           }
-          if (!callback?.error) {
-            toast.success("Logged In!");
-            router.push("/users");
+
+          if (callback?.ok) {
+            router.push("/conversations");
           }
         })
         .finally(() => setIsLoading(false));
@@ -94,7 +108,6 @@ const AuthForm = () => {
         }
       })
       .catch((error) => {
-        console.log(error);
         toast.error("Error occurred :(");
       })
       .finally(() => setIsLoading(false));

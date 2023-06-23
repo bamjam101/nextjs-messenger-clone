@@ -7,7 +7,6 @@ export async function POST(request: Request) {
   try {
     const currentUser = await getCurrentUser();
     const body = await request.json();
-    console.log(body);
 
     const { userId, isGroup, members, name } = body;
 

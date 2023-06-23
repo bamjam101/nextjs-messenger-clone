@@ -9,7 +9,6 @@ export default async function handler(
   response: NextApiResponse
 ) {
   const session = await getServerSession(request, response, authOptions);
-
   if (!session?.user?.email) {
     return response.status(401);
   }
@@ -18,6 +17,9 @@ export default async function handler(
   const channel = request.body.channel_name;
   const data = {
     user_id: session.user.email,
+    user_info: {
+      name: session.user.name,
+    },
   };
 
   const authResponse = pusherServer.authorizeChannel(socketId, channel, data);
