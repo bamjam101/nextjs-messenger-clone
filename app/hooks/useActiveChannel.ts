@@ -13,7 +13,6 @@ const useActiveChannel = () => {
     if (!channel) {
       channel = pusherClient.subscribe("presence-message");
       setActiveChannel(channel);
-      console.log(channel);
     }
 
     channel.bind("pusher:subscription_succeeded", (members: Members) => {

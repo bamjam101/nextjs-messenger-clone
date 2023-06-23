@@ -97,11 +97,12 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                     options={{ maxFiles: 1 }}
                     onUpload={handleUpload}
                     uploadPreset="vbx3ld6r"
-                    className="rounded-md border-2 border-gray-500 hover:border-sky-500 transition"
                   >
-                    <Button disabled={isLoading} secondary type="button">
-                      Change
-                    </Button>
+                    <div className="rounded-md border-2 border-gray-500 hover:border-sky-500 transition">
+                      <Button disabled={isLoading} secondary type="button">
+                        Change
+                      </Button>
+                    </div>
                   </CldUploadButton>
                 </div>
               </div>
